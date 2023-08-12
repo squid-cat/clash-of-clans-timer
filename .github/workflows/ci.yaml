@@ -1,0 +1,36 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  nextjs:
+    name: Next.js
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+  
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+          
+      - name: Enable Yarn Berry
+        run: corepack enable yarn
+
+      - name: Cache node_modules
+        id: vuejs_cache_id
+        uses: actions/cache@v3
+        with:
+          path: web/node_modules
+          key: vuejs-deps-${{ hashFiles('yarn.lock', 'patches/**') }}
+
+      - name: Yarn Install
+        if: steps.vuejs_cache_id.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+      
+      - name: Next.js ESLint
+        run: yarn lint
+      
+      - name: Next.js Build Check
+        run: yarn build
+  
