@@ -2,18 +2,32 @@ import React, { useState } from "react";
 import { styled } from "styled-components";
 
 type Props = {
-  id: number;
+  name: string;
+  disabled?: boolean;
+  onChangeTimer?(
+    name: string,
+    days: string,
+    hours: string,
+    minutes: string,
+  ): void;
+  onResetTimer?(name: string): void;
 };
 
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 40px;
 `;
 
 const Text = styled.p``;
 
-const SelectElement = styled.select``;
+const SelectElement = styled.select`
+  font-size: 20px;
+`;
+
+const ButtonOk = styled.button``;
+const ButtonReset = styled.button``;
 
 export default function InputTimer(props: Props) {
   const [selectedDays, setSelectedDays] = useState("");
@@ -33,9 +47,13 @@ export default function InputTimer(props: Props) {
   };
 
   return (
-    <Wrapper id={props.id.toString()}>
-      <SelectElement value={selectedDays} onChange={handleDaysChange}>
-        {Array.from({ length: 24 }, (_, index) => (
+    <Wrapper id={props.name}>
+      <SelectElement
+        value={selectedDays}
+        onChange={handleDaysChange}
+        disabled={props.disabled}
+      >
+        {Array.from({ length: 30 }, (_, index) => (
           <option key={index} value={index}>
             {index}
           </option>
@@ -43,7 +61,11 @@ export default function InputTimer(props: Props) {
       </SelectElement>
       <Text>日</Text>
 
-      <SelectElement value={selectedHours} onChange={handleHoursChange}>
+      <SelectElement
+        value={selectedHours}
+        onChange={handleHoursChange}
+        disabled={props.disabled}
+      >
         {Array.from({ length: 24 }, (_, index) => (
           <option key={index} value={index}>
             {index}
@@ -52,14 +74,42 @@ export default function InputTimer(props: Props) {
       </SelectElement>
       <Text>時</Text>
 
-      <SelectElement value={selectedMinutes} onChange={handleMinutesChange}>
-        {Array.from({ length: 60 }, (_, index) => (
-          <option key={index} value={index}>
-            {index}
+      <SelectElement
+        value={selectedMinutes}
+        onChange={handleMinutesChange}
+        disabled={props.disabled}
+      >
+        {Array.from({ length: 12 }, (_, index) => (
+          <option key={index * 5} value={index * 5}>
+            {index * 5}
           </option>
         ))}
       </SelectElement>
       <Text>分</Text>
+
+      {!props.disabled ? (
+        <ButtonOk
+          onClick={() => {
+            if (props.onChangeTimer)
+              props.onChangeTimer(
+                props.name,
+                selectedDays,
+                selectedHours,
+                selectedDays,
+              );
+          }}
+        >
+          設定
+        </ButtonOk>
+      ) : (
+        <ButtonReset
+          onClick={() => {
+            if (props.onResetTimer) props.onResetTimer(props.name);
+          }}
+        >
+          リセット
+        </ButtonReset>
+      )}
     </Wrapper>
   );
 }
