@@ -6,7 +6,9 @@ type Props = {
 
 export default function Clock(props: Props) {
 
-  const DisplayTime = styled.h2``;
+  const DisplayTime = styled.h2`
+    font-weight: normal;
+  `;
 
   const strYear = props.now.getFullYear().toString()
   const strMonth = (props.now.getMonth() + 1).toString().padStart(2, "0")

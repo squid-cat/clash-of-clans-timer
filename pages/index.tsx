@@ -9,6 +9,11 @@ export default function Home() {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 40px;
+  `;
+
+  const Title = styled.h2`
+    margin: 0;
   `;
 
   const [date, setDate] = useState(new Date());
@@ -21,6 +26,7 @@ export default function Home() {
 
   return (
     <Wrapper>
+      <Title>現在時刻</Title>
       <Clock now={date} />
     </Wrapper>
   )
