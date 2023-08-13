@@ -1,16 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 
 type Props = {
   name: string;
   disabled?: boolean;
-  onChangeTimer?(
-    name: string,
-    days: string,
-    hours: string,
-    minutes: string,
-  ): void;
-  onResetTimer?(name: string): void;
+  onChange?(name: string, days: number, hours: number, minutes: number): void;
 };
 
 const Wrapper = styled.div`
@@ -26,25 +20,27 @@ const SelectElement = styled.select`
   font-size: 20px;
 `;
 
-const ButtonOk = styled.button``;
-const ButtonReset = styled.button``;
-
 export default function InputTimer(props: Props) {
-  const [selectedDays, setSelectedDays] = useState("");
-  const [selectedHours, setSelectedHours] = useState("");
-  const [selectedMinutes, setSelectedMinutes] = useState("");
+  const [selectedDays, setSelectedDays] = useState(0);
+  const [selectedHours, setSelectedHours] = useState(0);
+  const [selectedMinutes, setSelectedMinutes] = useState(0);
 
   const handleDaysChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedDays(event.target.value);
+    setSelectedDays(Number(event.target.value));
   };
 
   const handleHoursChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedHours(event.target.value);
+    setSelectedHours(Number(event.target.value));
   };
 
   const handleMinutesChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedMinutes(event.target.value);
+    setSelectedMinutes(Number(event.target.value));
   };
+
+  useEffect(() => {
+    if (props.onChange)
+      props.onChange(props.name, selectedDays, selectedHours, selectedMinutes);
+  }, [props, selectedDays, selectedHours, selectedMinutes]);
 
   return (
     <Wrapper id={props.name}>
@@ -86,30 +82,6 @@ export default function InputTimer(props: Props) {
         ))}
       </SelectElement>
       <Text>分</Text>
-
-      {!props.disabled ? (
-        <ButtonOk
-          onClick={() => {
-            if (props.onChangeTimer)
-              props.onChangeTimer(
-                props.name,
-                selectedDays,
-                selectedHours,
-                selectedDays,
-              );
-          }}
-        >
-          設定
-        </ButtonOk>
-      ) : (
-        <ButtonReset
-          onClick={() => {
-            if (props.onResetTimer) props.onResetTimer(props.name);
-          }}
-        >
-          リセット
-        </ButtonReset>
-      )}
     </Wrapper>
   );
 }
