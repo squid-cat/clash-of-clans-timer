@@ -9,11 +9,14 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 40px;
 `;
 
 const Text = styled.p``;
 
-const SelectElement = styled.select``;
+const SelectElement = styled.select`
+  font-size: 20px;
+`;
 
 export default function InputTimer(props: Props) {
   const [selectedDays, setSelectedDays] = useState("");
@@ -35,7 +38,7 @@ export default function InputTimer(props: Props) {
   return (
     <Wrapper id={props.id.toString()}>
       <SelectElement value={selectedDays} onChange={handleDaysChange}>
-        {Array.from({ length: 24 }, (_, index) => (
+        {Array.from({ length: 30 }, (_, index) => (
           <option key={index} value={index}>
             {index}
           </option>
@@ -53,9 +56,9 @@ export default function InputTimer(props: Props) {
       <Text>時</Text>
 
       <SelectElement value={selectedMinutes} onChange={handleMinutesChange}>
-        {Array.from({ length: 60 }, (_, index) => (
-          <option key={index} value={index}>
-            {index}
+        {Array.from({ length: 12 }, (_, index) => (
+          <option key={index * 5} value={index * 5}>
+            {index * 5}
           </option>
         ))}
       </SelectElement>
